@@ -77,7 +77,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 </div>
             <?php endif; ?>
             
-            <form method="post" action="login.php"> 
+            <form method="post" action="login.php" autocomplete="off"> 
                 <div class="mb-5">
                     <label class="form-label-custom" for="username">
                         Nama Pengguna
