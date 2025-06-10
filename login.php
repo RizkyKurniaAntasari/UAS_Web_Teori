@@ -35,6 +35,12 @@
         .form-input-custom {
             @apply w-full py-3 px-4 bg-dark-input-bg text-dark-text-primary border border-dark-border rounded-lg leading-tight placeholder-dark-text-secondary focus:outline-none focus:border-dark-accent focus:ring-1 focus:ring-dark-accent shadow-sm;
         }
+        /* Hilangkan spinner di input type number (untuk Chrome, Safari, Edge) */
+        .no-spinner::-webkit-inner-spin-button,
+        .no-spinner::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -45,12 +51,12 @@
             <div class="w-full max-w-md">
                 <img src="img/logo/bansus.png" alt="Logo" class="w-14 h-14 object-contain flex mx-auto mb-4">
                 <h2 class="text-4xl font-bold text-dark-text-primary mb-8 text-center">Masuk Akun</h2>
-                <form action="create_account.php" method="POST" autocomplete="off">
+                <form action="controller/asdos/login_logic.php" method="POST" autocomplete="off">
                     <!-- NPM -->
                     <div class="mb-4">
                         <label for="npm" class="sr-only">NPM</label>
-                        <input type="text" id="npm" name="npm" placeholder="Masukkan NPM"
-                            class="form-input-custom">
+                        <input type="number" id="npm" name="npm" placeholder="Masukkan NPM"
+                            class="form-input-custom no-spinner">
                     </div>
                     <!-- Password -->
                     <div class="mb-4">

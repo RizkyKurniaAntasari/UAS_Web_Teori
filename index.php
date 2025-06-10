@@ -1,6 +1,6 @@
+<!-- Asisten Dosen / Index -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <link href="src/css/style.css" rel="stylesheet" />
     <meta charset="UTF-8" />
@@ -35,6 +35,12 @@
         .form-input-custom {
             @apply w-full py-3 px-4 bg-dark-input-bg text-dark-text-primary border border-dark-border rounded-lg leading-tight placeholder-dark-text-secondary focus:outline-none focus:border-dark-accent focus:ring-1 focus:ring-dark-accent shadow-sm;
         }
+        /*Chrome, Safari, Edge*/
+        .no-spinner::-webkit-inner-spin-button,
+        .no-spinner::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -46,7 +52,7 @@
                 <img src="img/logo/bansus.png" alt="Logo" class="w-14 h-14 object-contain flex mx-auto mb-4">
                 <h2 class="text-4xl font-bold text-dark-text-primary mb-8 text-center">Daftar Akun</h2>
 
-                <form action="create_account.php" method="POST" autocomplete="off">
+                <form method="POST" autocomplete="off">
                     <!-- Nama Lengkap -->
                     <div class="mb-4">
                         <label for="nama" class="sr-only">Nama Lengkap</label>
@@ -57,8 +63,8 @@
                     <!-- NPM -->
                     <div class="mb-4">
                         <label for="npm" class="sr-only">NPM</label>
-                        <input type="text" id="npm" name="npm" placeholder="Masukkan NPM"
-                            class="form-input-custom">
+                        <input type="number" id="npm" name="npm" placeholder="Masukkan NPM"
+                            class="form-input-custom no-spinner">
                     </div>
 
                     <!-- Password -->
@@ -76,11 +82,38 @@
                     </div>
 
                     <!-- Tombol Daftar -->
-                    <button type="submit"
+                    <button type="submit" name="simpan"
                         class="btn-login">
                         Daftar
                     </button>
                 </form>
+
+                <?php
+                include 'db.php';
+                if (isset($_POST['simpan'])) {
+                    $npm = $_POST['npm'];
+                    $nama = $_POST['nama'];
+                    $password = $_POST['password'];
+                    $confirm = $_POST['confirm_password'];
+
+                    if ($password !== $confirm) {
+                        echo "<script>alert('Password dan Konfirmasi tidak cocok!');</script>";
+                        exit;
+                    }
+
+                    $hash = password_hash($password, PASSWORD_DEFAULT);
+
+                    // Simpan ke DB (asumsikan tabel: asdos, dengan kolom: nama, npm, password)
+                    $sql = "INSERT INTO asdos (npm, nama, password) VALUES ('$npm', '$nama', '$hash')";
+                    $query = mysqli_query($conn, $sql);
+
+                    if ($query) {
+                        echo "<script>alert('Akun berhasil dibuat!'); window.location='login.php';</script>";
+                    } else {
+                        echo "<div class='text-red-500 mt-4'>Gagal membuat akun: " . mysqli_error($conn) . "</div>";
+                    }
+                }
+                ?>
 
                 <!-- Sudah punya akun -->
                 <p class="text-center text-dark-text-secondary text-sm mt-6">

@@ -1,21 +1,105 @@
 <?php
-session_start();
-
-// Simulasi user login
-$_SESSION['npm'] = '2317051097';
-$_SESSION['nama'] = 'Lekok Indah Lia';
-
-$currentPage = basename($_SERVER['PHP_SELF']);
 require_once '../head-nav-foo/header.php';
 require_once '../head-nav-foo/navbar.php';
-?>
+require_once '../../db.php';
 
+// Bagian untuk mengambil data user dari session
+$nama = '';
+$npm = '';
+
+if (isset($_SESSION['user'])) {
+  $user_id = $_SESSION['user'];
+  // Gunakan prepared statement untuk keamanan
+  $query = "SELECT nama, npm FROM asdos WHERE npm = ? LIMIT 1";
+  $stmt = $conn->prepare($query);
+  $stmt->bind_param('s', $user_id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($result && $result->num_rows === 1) {
+    $row = $result->fetch_assoc();
+    $nama = $row['nama'];
+    $npm = $row['npm'];
+    $_SESSION['nama'] = $nama;
+    $_SESSION['npm'] = $npm;
+  }
+  $stmt->close();
+}
+
+// Blok utama untuk menghasilkan data jadwal
+$jadwalDB = [];
+for ($hari = 1; $hari <= 3; $hari++) {
+  // 1. Ambil data yang sudah terisi dari database untuk hari terkait
+  $dbSlots = [];
+  $sql = "SELECT jam, waktu_text, npm, nama, keterangan, hari FROM jadwal_wawancara WHERE hari = ?";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param('i', $hari);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  while ($row = $result->fetch_assoc()) {
+    $dbSlots[$row['jam']] = $row;
+  }
+  $stmt->close();
+
+  // 2. Buat kerangka jadwal lengkap dari jam 09:00 - 15:00
+  $jadwalHariIni = [];
+  $start = new DateTime('09:00');
+  $end   = new DateTime('15:00');
+  $breakStart = new DateTime('12:00');
+  $breakEnd   = new DateTime('12:40');
+  $interval = new DateInterval('PT20M');
+  $slotIndex = 1;
+
+  // Ini adalah satu-satunya perulangan (loop) yang diperlukan
+  while ($start < $end) {
+    // Logika untuk melewati waktu istirahat
+    if ($start >= $breakStart && $start < $breakEnd) {
+      $start = clone $breakEnd; // Langsung lompat ke 12:40
+    }
+
+    $slotLabel = "S$slotIndex";
+    $jamAwal = $start->format('H:i');
+
+    // Hitung jam akhir slot
+    $jamAkhirDt = clone $start;
+    $jamAkhirDt->add($interval);
+    $jamAkhir = $jamAkhirDt->format('H:i');
+
+    $waktuText = "$jamAwal - $jamAkhir";
+
+    // 3. Siapkan data default untuk setiap slot
+    $slotData = [
+      'jam' => $slotLabel,
+      'waktu_text' => $waktuText,
+      'npm' => null,
+      'nama' => null,
+      'keterangan' => null,
+      'hari' => $hari,
+    ];
+
+    // 4. Jika slot ini ada di database, ambil detail bookingnya saja
+    // Ini memastikan 'waktu_text' yang kita hitung tidak akan tertimpa
+    if (isset($dbSlots[$slotLabel])) {
+      $slotData['npm']        = $dbSlots[$slotLabel]['npm'];
+      $slotData['nama']       = $dbSlots[$slotLabel]['nama'];
+      $slotData['keterangan'] = $dbSlots[$slotLabel]['keterangan'];
+    }
+
+    $jadwalHariIni[] = $slotData;
+
+    $start->add($interval);
+    $slotIndex++;
+  }
+
+  $jadwalDB[$hari] = $jadwalHariIni;
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jadwal Wawancara</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -48,84 +132,60 @@ require_once '../head-nav-foo/navbar.php';
   </div>
 
   <script>
-    const userNPM = "<?= $_SESSION['npm'] ?>";
-    const userNama = "<?= $_SESSION['nama'] ?>";
+    const userNPM = "<?= htmlspecialchars($npm ?? '', ENT_QUOTES, 'UTF-8') ?>";
+    const userNama = "<?= htmlspecialchars($nama ?? '', ENT_QUOTES, 'UTF-8') ?>";
+    const jadwalDB = <?= json_encode($jadwalDB) ?>;
 
-    const startHour = 9;
-    const endHour = 15;
-    const breakStart = 12 * 60;
-    const breakEnd = 12 * 60 + 40;
-
-    let dataJadwal = {};
-    for (let h = 1; h <= 5; h++) {
-      let slots = [];
-      let waktu = startHour * 60;
-      let no = 1;
-      while (waktu < endHour * 60) {
-        if (waktu >= breakStart && waktu < breakEnd) {
-          waktu = breakEnd;
-          continue;
-        }
-        slots.push({
-          no: no++,
-          jam: toJam(waktu) + ' - ' + toJam(waktu + 20),
-          npm: '',
-          nama: '',
-          keterangan: ''
-        });
-        waktu += 20;
+    function userSudahPunyaSlot() {
+      for (let h in jadwalDB) {
+        if (jadwalDB[h].some(slot => slot.npm === userNPM)) return true;
       }
-      dataJadwal[h] = slots;
-    }
-
-    function toJam(menit) {
-      let jam = Math.floor(menit / 60);
-      let mnt = menit % 60;
-      return `${jam.toString().padStart(2, '0')}:${mnt.toString().padStart(2, '0')}`;
+      return false;
     }
 
     function renderJadwal(hari) {
-      const data = dataJadwal[hari];
+      const data = jadwalDB[hari] || [];
       let html = `<table class="w-full border text-sm table-fixed">
-      <thead class="bg-yellow-400">
-        <tr class="text-center"> 
-          <th class="border px-2 py-2 w-[5%]">No</th>
-          <th class="border px-2 py-2 w-[15%]">NPM</th>
-          <th class="border px-2 py-2 w-[25%]">Nama</th>
-          <th class="border px-2 py-2 w-[20%]">Jam</th>
-          <th class="border px-2 py-2 w-[35%]">Keterangan</th>
-        </tr>
-      </thead>
-      <tbody>`;
+        <thead class="bg-yellow-400">
+          <tr class="text-center">
+            <th class="border px-2 py-2 w-[5%]">No</th>
+            <th class="border px-2 py-2 w-[15%]">NPM</th>
+            <th class="border px-2 py-2 w-[25%]">Nama</th>
+            <th class="border px-2 py-2 w-[20%]">Jam</th>
+            <th class="border px-2 py-2 w-[35%]">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>`;
 
-      data.forEach((item, index) => {
+      data.forEach((item) => {
+        const jamFormatted = item.waktu_text || '-';
+
         html += `<tr class="hover:bg-gray-50 text-center">
-        <td class="border px-2 py-2">${item.no}</td>
-        <td class="border px-2 py-2 truncate">${item.npm || '-'}</td>
-        <td class="border px-2 py-2 truncate">${item.nama || '-'}</td>
-        <td class="border px-2 py-2">${item.jam}</td>
-        <td class="border px-2 py-2">`;
+          <td class="border px-2 py-2">${item.jam}</td>
+          <td class="border px-2 py-2 truncate">${item.npm || '-'}</td>
+          <td class="border px-2 py-2 truncate">${item.nama || '-'}</td>
+          <td class="border px-2 py-2 font-mono">${jamFormatted}</td>
+          <td class="border px-2 py-2">`;
 
         if (!item.npm) {
           if (!userSudahPunyaSlot()) {
-            html += `<select onchange="isiKeterangan(${hari}, ${index}, this.value)" class="border rounded p-1 text-center text-xs w-full">
-                    <option value="">-- Pilih --</option>
-                    <option value="Offline">Offline</option>
-                    <option value="Online">Online</option>
-                  </select>`;
+            html += `<select onchange="isiKeterangan(${hari}, '${item.jam}', '${jamFormatted}', this.value)" class="border rounded p-1 text-center text-xs w-full">
+              <option value="">-- Pilih --</option>
+              <option value="Offline">Offline</option>
+              <option value="Online">Online</option>
+            </select>`;
           } else {
             html += '-';
           }
         } else if (item.npm === userNPM) {
-          html += `<select onchange="isiKeterangan(${hari}, ${index}, this.value)" class="border rounded p-1 text-center text-xs w-full">
-                    <option value="Offline" ${item.keterangan === 'Offline' ? 'selected' : ''}>Offline</option>
-                    <option value="Online" ${item.keterangan === 'Online' ? 'selected' : ''}>Online</option>
-                    <option value="">-- Batalkan --</option>
-                  </select>`;
+          html += `<select onchange="isiKeterangan(${hari}, '${item.jam}', '${jamFormatted}', this.value)" class="border rounded p-1 text-center text-xs w-full">
+            <option value="">-- Batalkan --</option>
+            <option value="Offline" ${item.keterangan === 'Offline' ? 'selected' : ''}>Offline</option>
+            <option value="Online" ${item.keterangan === 'Online' ? 'selected' : ''}>Online</option>
+          </select>`;
         } else {
           html += item.keterangan || '-';
         }
-
         html += `</td></tr>`;
       });
 
@@ -133,66 +193,47 @@ require_once '../head-nav-foo/navbar.php';
       document.getElementById('jadwalContainer').innerHTML = html;
     }
 
-    function userSudahPunyaSlot() {
-      for (let h = 1; h <= 5; h++) {
-        if (dataJadwal[h].some(slot => slot.npm === userNPM)) {
-          return true;
-        }
-      }
-      return false;
-    }
+    function isiKeterangan(hari, jam, waktuText, keterangan) {
+      const pesanKonfirmasi = keterangan === "" ?
+        "Yakin ingin membatalkan jadwal wawancara?" :
+        `Yakin memilih jadwal pada jam ${waktuText} dengan keterangan: ${keterangan}?`;
 
-    function isiKeterangan(hari, index, value) {
-      const currentSlot = dataJadwal[hari][index];
-      const isUserSlot = currentSlot.npm === userNPM;
-      const slotTerisiOrangLain = currentSlot.npm && !isUserSlot;
-
-      if (slotTerisiOrangLain) {
-        alert("Slot ini sudah diisi oleh orang lain.");
-        renderJadwal(hari);
+      if (!confirm(pesanKonfirmasi)) {
+        renderJadwal(document.getElementById('daySelector').value); // reset tampilan jika batal
         return;
       }
 
-      if (isUserSlot && value === "") {
-        currentSlot.npm = '';
-        currentSlot.nama = '';
-        currentSlot.keterangan = '';
-        renderJadwal(hari);
-        return;
-      }
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '../../controller/asdos/jadwal_wawancara_logic.php';
 
-      if (!isUserSlot && value !== "") {
-        if (userSudahPunyaSlot()) {
-          alert("Anda hanya boleh memilih 1 slot wawancara.");
-          renderJadwal(hari);
-          return;
-        }
-        currentSlot.npm = userNPM;
-        currentSlot.nama = userNama;
-        currentSlot.keterangan = value;
-        renderJadwal(hari);
-        return;
-      }
+      const inputs = {
+        hari: hari,
+        jam: jam,
+        waktu_text: waktuText,
+        npm: userNPM,
+        nama: userNama,
+        keterangan: keterangan
+      };
 
-      if (isUserSlot && value !== "") {
-        currentSlot.keterangan = value;
-        renderJadwal(hari);
-        return;
+      for (const key in inputs) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = inputs[key];
+        form.appendChild(input);
       }
-
-      renderJadwal(hari);
+      document.body.appendChild(form);
+      form.submit();
     }
 
     document.getElementById('daySelector').addEventListener('change', e => {
       renderJadwal(e.target.value);
     });
 
-    renderJadwal(1);
+    renderJadwal(1); // Render jadwal hari pertama saat halaman dimuat
   </script>
-  <?php
-      require_once '../head-nav-foo/footer.php';
-  ?>
-</body>
 
+</body>
 
 </html>
