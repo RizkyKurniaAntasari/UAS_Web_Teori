@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ .'/../../db.php';
+require_once __DIR__ .'../../db.php';
 
 $hari = intval($_POST['hari']);
 $jam = trim($_POST['jam']); // Ini adalah "S1", "S2", ...
