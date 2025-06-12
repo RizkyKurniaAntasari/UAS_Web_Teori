@@ -2,29 +2,36 @@
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "uas_web";
+$db_name = "uas_web";
+$charset = "utf8mb4";
 
-$conn = mysqli_connect($host, $user, $password, $db);
-
-function check_auth()
-{
-    if (!isset($_SESSION['user'])) {
-        echo "<script>
-        alert('Silahkan login dulu!');
-        window.location.href = '" . BASE_URL . "login.php';
-    </script>";
-        exit;
-    }
-}
-
-if (!$conn) {
-    die("Error Connection : " . mysqli_connect_error());
-}
 if (!defined('BASE_URL')) {
-    // Ambil path absolut ke file saat ini
-    $document_root = realpath($_SERVER['DOCUMENT_ROOT']);
-    $current_dir = realpath(__DIR__);
-    $relative_path = str_replace($document_root, '', $current_dir);
-    $base_url = '/' . ltrim(str_replace('\\', '/', $relative_path), '/') . '/';
-    define('BASE_URL', $base_url);
+    define('BASE_URL', '/teori/oprec');
 }
+
+function get_pdo_connection(): PDO
+{
+    global $host, $db_name, $user, $password, $charset;
+    static $pdo = null;
+
+    if ($pdo === null) {
+        $dsn = "mysql:host=$host;dbname=$db_name;charset=$charset";
+        $options = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ];
+        try {
+            $pdo = new PDO($dsn, $user, $password, $options);
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage(), (int)$e->getCode());
+        }
+    }
+    return $pdo;
+}
+
+$conn = mysqli_connect($host, $user, $password, $db_name);
+if (!$conn) {
+    die("Legacy Connection Error: " . mysqli_connect_error());
+}
+?>

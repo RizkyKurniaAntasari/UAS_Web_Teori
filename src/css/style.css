@@ -7,3 +7,25 @@
 body {
   @apply font-sans;
 }
+
+@layer components {
+  /* Dark theme form inputs (for login, register, admin modals) */
+  .form-input-dark {
+    @apply w-full py-3 px-4 bg-[#374151] text-[#F3F4F6] border border-[#374151] rounded-lg leading-tight placeholder-[#9CA3AF] focus:outline-none focus:border-[#FFCC00] focus:ring-1 focus:ring-[#FFCC00] shadow-sm transition-all duration-200;
+  }
+
+  /* Light theme form inputs (for user-facing pages like application form) */
+  .form-input-light {
+    @apply w-full py-2 px-4 bg-white text-gray-800 border border-gray-300 rounded-lg leading-tight placeholder-gray-400 focus:outline-none focus:border-[#FFCC00] focus:ring-2 focus:ring-[#FFCC00]/50 shadow-sm transition-all duration-200;
+  }
+}
+
+/* Remove number input spinners across all browsers */
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number].no-spinner {
+    -moz-appearance: textfield;
+}

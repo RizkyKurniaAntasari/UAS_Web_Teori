@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+</head>
+<body class="bg-[#111827] p-10">
+
+    <div class="relative w-full flex justify-end">
+        <button id="admin-menu-btn" class="flex items-center space-x-2 text-white bg-gray-700 p-2 rounded-lg">
+            <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
+                <i class="ri-user-line text-yellow-500"></i> 
+            </div>
+            <span class="font-medium">Admin</span>
+            <i class="ri-arrow-down-s-line"></i>
+        </button>
+
+        <div id="admin-menu-dropdown" class="hidden absolute right-0 top-14 mt-1 w-48 bg-gray-800 rounded-lg shadow-xl border border-gray-700 z-50">
+            <div class="p-1"> 
+                <a href="#" class="block flex items-center space-x-3 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md"> 
+                    <i class="ri-settings-3-line"></i>
+                    <span>Pengaturan</span>
+                </a>
+                <hr class="my-1 border-gray-600"> 
+                <a href="#" class="block flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-md">
+                    <i class="ri-logout-box-r-line"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const adminMenuBtn = document.getElementById('admin-menu-btn');
+        const adminMenuDropdown = document.getElementById('admin-menu-dropdown');
+
+        if (adminMenuBtn && adminMenuDropdown) {
+            adminMenuBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                adminMenuDropdown.classList.toggle('hidden');
+            });
+        }
+
+        window.addEventListener('click', function (event) {
+             if (adminMenuDropdown && !adminMenuDropdown.contains(event.target) && !adminMenuBtn.contains(event.target)) {
+                adminMenuDropdown.classList.add('hidden');
+            }
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,21 +1,42 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../db.php';
+require_once '../../db.php';
 
-$npm = $_POST['npm'];
-$password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../../login.php');
+    exit;
+}
 
-$query = "SELECT * FROM asdos WHERE npm='$npm'";
-$result = mysqli_query($conn, $query);
-$user = mysqli_fetch_assoc($result);
+$npm = $_POST['npm'] ?? '';
+$password = $_POST['password'] ?? '';
 
-if ($user && password_verify($password, $user['password'])) {
-    $_SESSION['user'] = $user['npm'];
-    header("Location: " . BASE_URL . "views/asdos/index.php");
+if (empty($npm) || empty($password)) {
+    $_SESSION['error'] = "NPM dan password wajib diisi.";
+    header("Location: ../../login.php");
     exit();
-} else {
-    $_SESSION['error'] = "npm atau password salah";
-    header("Location: " . BASE_URL . "login.php");
+}
+
+try {
+    $pdo = get_pdo_connection();
+    $stmt = $pdo->prepare("SELECT npm, password FROM asdos WHERE npm = ?");
+    $stmt->execute([$npm]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+        session_regenerate_id(true);
+        $_SESSION['user'] = $user['npm'];
+        unset($_SESSION['error']);
+        header("Location: ../../views/asdos/index.php");
+        exit();
+    } else {
+        $_SESSION['error'] = "NPM atau password salah.";
+        header("Location: ../../login.php");
+        exit();
+    }
+} catch (PDOException $e) {
+    error_log('Login Error: ' . $e->getMessage());
+    $_SESSION['error'] = "Terjadi kesalahan pada server.";
+    header("Location: ../../login.php");
     exit();
 }
 ?>
