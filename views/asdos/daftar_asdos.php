@@ -2,13 +2,13 @@
 $currentPage = basename($_SERVER['PHP_SELF']);
 require_once '../head-nav-foo/header.php';
 require_once '../head-nav-foo/navbar.php';
-require_once '../../../db.php';
+require_once '../../db.php';
 
 $user_data = ['nama' => '', 'npm' => ''];
 $pendaftaran_data = [];
 $is_submitted = false;
 $disabled = '';
-$available_courses = [];
+$available_courses = []; // This will hold the processed, unique course names
 
 if (isset($_SESSION['user'])) {
     $user_id = $_SESSION['user'];
@@ -27,8 +27,20 @@ if (isset($_SESSION['user'])) {
         $disabled = 'disabled';
     }
     
+    // Fetch all active course names
     $stmt_courses = $pdo->query("SELECT nama FROM mata_kuliah WHERE status = 'Aktif' ORDER BY nama");
-    $available_courses = $stmt_courses->fetchAll(PDO::FETCH_COLUMN);
+    $raw_courses = $stmt_courses->fetchAll(PDO::FETCH_COLUMN);
+
+    // Process raw courses to ensure case-insensitive uniqueness
+    $seen_courses = [];
+    foreach ($raw_courses as $course) {
+        $lower_course = strtolower($course);
+        if (!isset($seen_courses[$lower_course])) {
+            $seen_courses[$lower_course] = $course; // Store the original casing of the first encountered unique course
+        }
+    }
+    $available_courses = array_values($seen_courses); // Get only the unique course names (with their first encountered casing)
+    sort($available_courses); // Keep them sorted alphabetically
 }
 ?>
 
@@ -43,7 +55,7 @@ if (isset($_SESSION['user'])) {
 <body class="bg-gray-100">
     <section class="p-8 max-w-4xl mx-auto bg-white shadow-md rounded-md mb-10 mt-8">
         <h2 class="text-center text-3xl font-bold text-black mb-10">Form Pendaftaran Asisten Dosen</h2>
-        <form action="../../../controller/asdos/daftar_asdos_logic.php" method="POST" enctype="multipart/form-data" class="space-y-5" autocomplete="off">
+        <form action="../../controller/asdos/daftar_asdos_logic.php" method="POST" enctype="multipart/form-data" class="space-y-5" autocomplete="off">
             <div>
                 <label class="block font-bold mb-1">Nama Lengkap</label>
                 <input type="text" name="nama" value="<?= htmlspecialchars($user_data['nama']) ?>" readonly class="w-full border bg-gray-200 border-gray-400 rounded px-4 py-2">
@@ -53,7 +65,7 @@ if (isset($_SESSION['user'])) {
                 <input type="text" name="npm" value="<?= htmlspecialchars($user_data['npm']) ?>" readonly class="w-full border bg-gray-200 border-gray-400 rounded px-4 py-2">
             </div>
             <div>
-                <label class="block font-bold mb-1">No. Whatsapp</label>
+                <label class="block font-bold mb-1">No. Whatsapp</labeL>
                 <input type="tel" name="wa" required <?= $disabled ?> value="<?= htmlspecialchars($pendaftaran_data['wa'] ?? '') ?>" class="w-full border border-gray-400 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ffcc00]">
             </div>
             <div>

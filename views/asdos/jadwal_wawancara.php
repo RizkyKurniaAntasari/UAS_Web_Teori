@@ -4,6 +4,7 @@ require_once '../head-nav-foo/header.php';
 require_once '../head-nav-foo/navbar.php';
 
 $user_npm = $_SESSION['user'] ?? '';
+$today_date = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -17,11 +18,8 @@ $user_npm = $_SESSION['user'] ?? '';
   <div class="max-w-5xl mx-auto p-6">
     <h1 class="text-3xl font-bold text-center mb-8">Jadwal Wawancara Calon Asisten</h1>
     <div class="flex justify-end mb-4">
-      <select id="daySelector" class="p-2 rounded border bg-white">
-        <option value="1">28 Juli 2025</option>
-        <option value="2">29 Juli 2025</option>
-        <option value="3">30 Juli 2025</option>
-      </select>
+      <label for="dateSelector" class="sr-only">Pilih Tanggal</label>
+      <input type="date" id="dateSelector" value="<?= htmlspecialchars($today_date) ?>" class="p-2 rounded border bg-white">
     </div>
     <div id="jadwalContainer" class="overflow-x-auto bg-white p-4 rounded-lg shadow">
       <div id="loading" class="text-center p-8">Memuat jadwal...</div>

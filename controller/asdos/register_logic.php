@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '../../db.php';
+require_once __DIR__ . '/../../db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ../../index.php');
@@ -41,6 +41,6 @@ try {
 
 } catch (PDOException $e) {
     error_log('Registration Error: ' . $e->getMessage());
-    exit('Terjadi kesalahan pada server. Silakan coba lagi nanti.');
+    exit('Terjadi kesalahan pada server. Silakan coba lagi nanti.'.$e);
 }
 ?>
