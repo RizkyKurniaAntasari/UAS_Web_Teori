@@ -5,5 +5,5 @@ session_unset();  // menghapus semua variabel session
 session_destroy(); // menghancurkan session
 
 // Redirect ke index.php setelah logout
-header("Location: " . BASE_URL . "login.php");
+header("Location: " . "../../login.php");
 exit;

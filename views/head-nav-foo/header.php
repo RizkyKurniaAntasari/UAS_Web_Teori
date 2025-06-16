@@ -51,7 +51,7 @@ if (isset($_SESSION['user'])) {
                         class="cursor-pointer w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border-2 border-white hover:border-yellow-400 transition duration-300" />
 
                     <div class="absolute right-0 w-40 bg-white rounded shadow-md z-50 hidden group-hover:block">
-                        <a href="/teori/oprec/controller/asdos/logout_logic.php"
+                        <a href="../../controller/asdos/logout_logic.php"
                             onclick="return confirm('Apakah Anda yakin ingin logout?')"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-100">
                             Logout
@@ -64,7 +64,7 @@ if (isset($_SESSION['user'])) {
                     </div>
                 </div>
             <?php else: ?>
-                <a href="/teori/oprec/controller/asdos/logout_logic.php">
+                <a href="../../login.php">
                     <img src="../../img/user.jpg"
                         alt="Default Avatar"
                         class="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border-2 border-white hover:border-yellow-400 transition duration-300" />
