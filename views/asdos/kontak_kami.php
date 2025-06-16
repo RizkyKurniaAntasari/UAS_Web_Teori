@@ -12,8 +12,8 @@ require_once '../head-nav-foo/navbar.php';
     <title>Kontak Kami</title>
 </head>
 
-<body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto px-4 py-10">
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-10 flex flex-col flex-grow">
         <h1 class="text-3xl font-bold text-center mb-8">Kontak Kami</h1>
 
         <p class="text-center mb-10 text-gray-600">Silakan hubungi Penanggung Jawab (PJ) kami melalui WhatsApp untuk informasi lebih lanjut.</p>
