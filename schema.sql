@@ -3,13 +3,13 @@ CREATE DATABASE IF NOT EXISTS uas_web;
 
 USE uas_web;
 
-CREATE TABLE asdos(
+CREATE TABLE IF NOT EXISTS asdos(
     npm INT UNSIGNED PRIMARY KEY,
     nama VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE pendaftaran(
+CREATE TABLE IF NOT EXISTS pendaftaran(
     id_pendaftaran INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     npm INT UNSIGNED NOT NULL,
     wa VARCHAR(15) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE pendaftaran(
     FOREIGN KEY (npm) REFERENCES asdos(npm) ON DELETE CASCADE
 );
 
-CREATE TABLE jadwal_wawancara (
+CREATE TABLE IF NOT EXISTS jadwal_wawancara (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   hari DATE NOT NULL,
   jam VARCHAR(20) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE jadwal_wawancara (
   FOREIGN KEY (npm) REFERENCES asdos(npm) ON DELETE SET NULL
 );
 
-CREATE TABLE mata_kuliah (
+CREATE TABLE IF NOT EXISTS mata_kuliah (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     kode VARCHAR(20) NOT NULL UNIQUE,
     nama VARCHAR(255) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE mata_kuliah (
     status ENUM('Aktif', 'Nonaktif') NOT NULL DEFAULT 'Aktif'
 );
 
-CREATE TABLE hasil_seleksi (
+CREATE TABLE IF NOT EXISTS hasil_seleksi (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     npm INT UNSIGNED NOT NULL,
     nama_mahasiswa VARCHAR(255) NOT NULL,

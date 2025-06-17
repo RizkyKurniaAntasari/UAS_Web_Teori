@@ -29,7 +29,11 @@ try {
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM asdos WHERE npm = ?");
     $stmt->execute([$npm]);
     if ($stmt->fetchColumn() > 0) {
-        exit('Error: NPM sudah terdaftar.');
+        echo "<script>
+              alert('NPM sudah terdaftar');
+              window.location.href = '../../index.php';
+          </script>";
+        exit(); 
     }
 
     $hash = password_hash($password, PASSWORD_BCRYPT);
@@ -38,9 +42,7 @@ try {
     $stmt->execute([$npm, $nama, $hash]);
 
     echo "<script>alert('Akun berhasil dibuat! Silakan login.'); window.location.href='../../login.php';</script>";
-
 } catch (PDOException $e) {
     error_log('Registration Error: ' . $e->getMessage());
-    exit('Terjadi kesalahan pada server. Silakan coba lagi nanti.'.$e);
+    exit('Terjadi kesalahan pada server. Silakan coba lagi nanti.' . $e);
 }
-?>
