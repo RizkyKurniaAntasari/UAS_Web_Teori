@@ -6,11 +6,26 @@ $pageTitle = "Kelola Pengumuman";
 $currentPage = "pengumuman";
 
 try {
+
     $pdo = get_pdo_connection();
-    $stmt = $pdo->query("SELECT * FROM hasil_seleksi ORDER BY semester_mk, mata_kuliah, peran DESC");
+
+    // Query hasil seleksi dengan JOIN mata kuliah
+    $stmt = $pdo->query("
+    SELECT hs.*, mk.nama AS mata_kuliah 
+    FROM hasil_seleksi hs 
+    JOIN mata_kuliah mk ON hs.id_mata_kuliah = mk.id 
+    ORDER BY hs.semester_mk, mk.nama, hs.peran DESC
+    ");
     $hasil_seleksi = $stmt->fetchAll();
+    $stmt->closeCursor(); // <<< Tambahkan ini untuk menutup statement
+
+    $stmt = $pdo->query("SELECT * FROM mata_kuliah");
+    $mk = $stmt->fetchAll();
+    $stmt->closeCursor();
+
 } catch (PDOException $e) {
     $hasil_seleksi = [];
+    $mk = [];
     error_log("Failed to fetch hasil seleksi: " . $e->getMessage());
 }
 
@@ -46,7 +61,7 @@ require __DIR__ . '/components/html_head.php';
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#374151]">
-                             <?php foreach ($hasil_seleksi as $data): ?>
+                            <?php foreach ($hasil_seleksi as $data): ?>
                                 <tr data-id="<?= $data['id'] ?>">
                                     <td class="px-6 py-4">
                                         <div class="text-sm font-medium text-gray-100"><?= htmlspecialchars($data['nama_mahasiswa']) ?></div>
@@ -77,15 +92,23 @@ require __DIR__ . '/components/html_head.php';
                     <label class="block text-sm font-medium text-gray-300 mb-2">NPM</label>
                     <input type="text" name="npm" required class="form-input-dark" inputmode="numeric" pattern="\d*">
                 </div>
-                 <div>
+                <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
                     <input type="text" name="nama" required class="form-input-dark">
                 </div>
+
+
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Mata Kuliah</label>
-                    <input type="text" name="mata_kuliah" required class="form-input-dark">
+                    <select name="mata_kuliah" required class="form-input-dark">
+                        <?php foreach ($mk as $row): ?>
+                            <option value="<?= $row['id'] ?>"><?= htmlspecialchars($row['nama']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
-                 <div>
+
+
+                <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Semester MK</label>
                     <input type="text" name="semester_mk" required class="form-input-dark" inputmode="numeric" pattern="[1-8]">
                 </div>
@@ -110,4 +133,5 @@ require __DIR__ . '/components/html_head.php';
     <?php require __DIR__ . '/components/footer_scripts.php'; ?>
     <script src="js/pengumumanManager.js"></script>
 </body>
+
 </html>

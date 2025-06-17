@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS pendaftaran(
     pengalaman VARCHAR(50),
     prioritas VARCHAR(50),
     file VARCHAR(255) NOT NULL,
+    status VARCHAR(20) DEFAULT NULL,
     FOREIGN KEY (npm) REFERENCES asdos(npm) ON DELETE CASCADE
 );
 
@@ -51,6 +52,7 @@ CREATE TABLE IF NOT EXISTS hasil_seleksi (
     npm INT UNSIGNED NOT NULL,
     nama_mahasiswa VARCHAR(255) NOT NULL,
     id_mata_kuliah INT UNSIGNED NOT NULL,
+    semester_mk INT NOT NULL,
     peran ENUM('Koordinator', 'Anggota') NOT NULL,
     kelas_pj VARCHAR(10) NOT NULL,
     FOREIGN KEY (npm) REFERENCES asdos(npm) ON DELETE CASCADE,

@@ -52,8 +52,8 @@ if (isset($_SESSION['user'])) {
     <title>Daftar Asisten Dosen</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <section class="p-8 max-w-4xl mx-auto bg-white shadow-md rounded-md mb-10 mt-8">
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <section class="p-8 max-w-4xl mx-auto bg-white shadow-md rounded-md mb-10 mt-8 flex-grow w-full">
         <h2 class="text-center text-3xl font-bold text-black mb-10">Form Pendaftaran Asisten Dosen</h2>
         <form action="../../controller/asdos/daftar_asdos_logic.php" method="POST" enctype="multipart/form-data" class="space-y-5" autocomplete="off">
             <div>
@@ -93,7 +93,7 @@ if (isset($_SESSION['user'])) {
             <div>
                 <label class="block font-bold mb-1">Upload Surat Pernyataan</label>
                 <?php if ($is_submitted): ?>
-                    <a href="<?= BASE_URL . '/uploads/' . htmlspecialchars($pendaftaran_data['file']) ?>" target="_blank" class="text-blue-600 underline">Lihat File Terunggah</a>
+                    <a href="<?= '../../uploads/' . htmlspecialchars($pendaftaran_data['file']) ?>" target="_blank" class="text-blue-600 underline">Lihat File Terunggah</a>
                 <?php else: ?>
                     <input type="file" name="file" required accept=".pdf" class="w-full border border-gray-400 rounded px-4 py-2">
                 <?php endif; ?>

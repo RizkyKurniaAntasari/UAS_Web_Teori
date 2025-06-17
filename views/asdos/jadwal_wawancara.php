@@ -8,14 +8,15 @@ $today_date = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jadwal Wawancara</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <div class="max-w-5xl mx-auto p-6">
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+  <div class="flex-grow max-w-5xl mx-auto p-6 w-full">
     <h1 class="text-3xl font-bold text-center mb-8">Jadwal Wawancara Calon Asisten</h1>
     <div class="flex justify-end mb-4">
       <label for="dateSelector" class="sr-only">Pilih Tanggal</label>
@@ -36,8 +37,11 @@ $today_date = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
     </div>
   </div>
 
-  <?php require_once '../head-nav-foo/footer.php'; ?>
-  <script> const userNPM = "<?= htmlspecialchars($user_npm, ENT_QUOTES, 'UTF-8') ?>"; </script>
+  <script>
+    const userNPM = "<?= htmlspecialchars($user_npm, ENT_QUOTES, 'UTF-8') ?>";
+  </script>
   <script src="js/jadwal_booking.js"></script>
+  <?php require_once '../head-nav-foo/footer.php'; ?>
 </body>
+
 </html>

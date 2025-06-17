@@ -1,4 +1,9 @@
 <?php
+$document_root = realpath($_SERVER['DOCUMENT_ROOT']);
+$current_dir = realpath(__DIR__);
+$relative_path = str_replace($document_root, '', $current_dir);
+$base_url = '/' . ltrim(str_replace('\\', '/', $relative_path), '/') . '/';
+define('BASE_URL', $base_url);
 
 function get_pdo_connection(): PDO
 {
@@ -16,8 +21,7 @@ function get_pdo_connection(): PDO
     ];
 
     try {
-        $pdo = new PDO($dsn, $user, $pass, $options);
-        return $pdo;
+        return new PDO($dsn, $user, $pass, $options);
     } catch (\PDOException $e) {
         throw new \PDOException($e->getMessage(), (int)$e->getCode());
     }

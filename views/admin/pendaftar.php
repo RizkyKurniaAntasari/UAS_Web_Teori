@@ -7,7 +7,13 @@ $currentPage = "pendaftar";
 
 try {
     $pdo = get_pdo_connection();
-    $stmt = $pdo->query("SELECT p.*, a.nama FROM pendaftaran p JOIN asdos a ON p.npm = a.npm ORDER BY p.id_pendaftaran DESC");
+    $stmt = $pdo->query("SELECT p.*, 
+                                a.nama, p.status
+                                FROM pendaftaran p 
+                                JOIN asdos a 
+                                ON p.npm = a.npm 
+                                ORDER BY p.id_pendaftaran 
+                                DESC");
     $pendaftar_list = $stmt->fetchAll();
 } catch (PDOException $e) {
     $pendaftar_list = [];

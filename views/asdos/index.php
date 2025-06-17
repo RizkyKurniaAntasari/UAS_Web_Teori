@@ -26,7 +26,7 @@ try {
         .slide { min-width: 100%; }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 flex flex-col min-h-screen">
     <section id="beranda" class="relative overflow-hidden h-[600px]">
         <div class="slider h-full">
             <div class="slide bg-cover bg-center" style="background-image: url('../../img/FOTO/DSC_1801.JPG')"></div>
@@ -44,7 +44,7 @@ try {
         </div>
     </section>
 
-    <section id="matakuliah" class="py-20 bg-gray-50">
+    <section id="matakuliah" class="py-20 bg-gray-50 flex-grow w-full">
         <div class="container mx-auto px-4 scroll-mt-10">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Daftar Mata Kuliah</h2>
