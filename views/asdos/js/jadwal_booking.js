@@ -1,4 +1,4 @@
-let isProcessing = false; 
+let isProcessing = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     const dateSelector = document.getElementById('dateSelector');
@@ -7,6 +7,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingDiv = document.getElementById('loading');
 
     const API_URL = 'api/jadwal_handler.php';
+
+    const setDateRange = () => {
+        const today = new Date();
+        const minDate = today.toISOString().split('T')[0];
+
+        const maxDateObj = new Date(today);
+        maxDateObj.setDate(today.getDate() + 5); // hari 
+        const maxDate = maxDateObj.toISOString().split('T')[0];
+
+        // dateSelector.setAttribute('min', '2025-07-01'); // hapus atas kalo manual
+        // dateSelector.setAttribute('max', '2025-07-07'); // hapus bawah kalo manual
+
+        dateSelector.setAttribute('min', minDate);
+        dateSelector.setAttribute('max', maxDate);
+
+        if (dateSelector.value < minDate || dateSelector.value > maxDate) {
+            dateSelector.value = minDate;
+        }
+    };
 
     const fetchAndRenderSchedule = async () => {
         if (!dateSelector || !dateSelector.value) {
@@ -135,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (dateSelector) {
+        setDateRange();
         dateSelector.addEventListener('change', fetchAndRenderSchedule);
     }
 
