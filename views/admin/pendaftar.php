@@ -36,13 +36,23 @@ try {
                             <tr class="text-left">
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Nama & NPM</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Kontak (WA)</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Matkul 1</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Matkul 2</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Kebersediaan</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Pengalaman</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-700">
                             <?php if (empty($pendaftar_list)): ?>
-                                <tr id="no-results-pendaftar"><td colspan="4" class="px-6 py-12 text-center text-gray-500">Tidak ada data pendaftar.</td></tr>
+                                <tr id="no-results-pendaftar">
+                                    <td colspan="8" class="px-6 py-12 text-center text-gray-500 align-middle" style="vertical-align: middle; height: 300px;">
+                                        <div class="flex flex-col items-center justify-center h-full w-full">
+                                            <span class="block text-center w-full">Tidak ada data pendaftar.</span>
+                                        </div>
+                                    </td>
+                                </tr>
                             <?php else: ?>
                                 <?php foreach ($pendaftar_list as $pendaftar): ?>
                                     <tr data-id="<?= $pendaftar['id_pendaftaran'] ?>">
@@ -53,6 +63,10 @@ try {
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['wa']) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['matkul1']) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['matkul2']) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['kebersediaan']) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['pengalaman']) ?></td>
                                         <td class="px-6 py-4 align-top">
                                             <select name="status" class="status-select bg-gray-700 border border-gray-600 text-gray-200 rounded-lg text-xs p-1">
                                                 <option value="Dalam Review" <?= $pendaftar['status'] == 'Dalam Review' ? 'selected' : '' ?>>Dalam Review</option>
