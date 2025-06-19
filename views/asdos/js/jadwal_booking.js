@@ -1,9 +1,11 @@
+let isProcessing = false; 
+
 document.addEventListener('DOMContentLoaded', () => {
     const dateSelector = document.getElementById('dateSelector');
     const tableBody = document.getElementById('jadwalTbody');
     const table = document.getElementById('jadwalTable');
     const loadingDiv = document.getElementById('loading');
-    
+
     const API_URL = 'api/jadwal_handler.php';
 
     const fetchAndRenderSchedule = async () => {
@@ -11,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingDiv.textContent = 'Elemen pemilih tanggal tidak ditemukan.';
             return;
         }
-        
+
         table.classList.add('hidden');
         loadingDiv.classList.remove('hidden');
         loadingDiv.textContent = 'Memuat jadwal...';
@@ -27,14 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (result.status === 'success') {
                 if (result.schedule.length === 0) {
-                     tableBody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500">Tidak ada jadwal yang tersedia untuk tanggal ini.</td></tr>`;
-                     return;
+                    tableBody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-gray-500">Tidak ada jadwal yang tersedia untuk tanggal ini.</td></tr>`;
+                    return;
                 }
                 renderTable(result.schedule, result.user_has_booking);
             } else {
                 throw new Error(result.message || 'Gagal memuat jadwal.');
             }
-        } catch(error) {
+        } catch (error) {
             loadingDiv.classList.add('hidden');
             tableBody.innerHTML = `<tr><td colspan="3" class="text-center p-4 text-red-500">Error: ${error.message}</td></tr>`;
         }
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         schedule.forEach(slot => {
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50 text-center';
-            
+
             let availabilityCellHTML = '';
             if (slot.is_users_booking) {
                 availabilityCellHTML = `
@@ -58,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 availabilityCellHTML = `<span class="text-gray-400">-</span>`;
             } else {
                 availabilityCellHTML = `
-                     <select class="p-1 border rounded text-xs select-book" data-jam="${slot.jam}" data-waktu-text="${slot.waktu_text}">
+                    <select class="p-1 border rounded text-xs select-book" data-jam="${slot.jam}" data-waktu-text="${slot.waktu_text}">
                         <option value="">-- Ambil Jadwal --</option>
                         <option value="Online">Online</option>
                         <option value="Offline">Offline</option>
@@ -69,37 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="border px-2 py-2">${slot.jam}</td>
                 <td class="border px-2 py-2 font-mono">${slot.waktu_text}</td>
                 <td class="border px-2 py-2">${availabilityCellHTML}</td>`;
-            
+
             tableBody.appendChild(row);
         });
     };
 
-    const handleBookingAction = async (event) => {
-        const target = event.target;
-        
-        const isBooking = target.classList.contains('select-book');
-        const isCancelling = target.classList.contains('btn-cancel');
+    const handleBooking = async (jam, waktu_text, keterangan) => {
+        if (isProcessing) return;
+        isProcessing = true;
 
-        if (!isBooking && !isCancelling) return;
-
-        const day = dateSelector.value;
-        let keterangan, jam, waktu_text, confirmationMessage;
-        
-        if (isBooking) {
-            keterangan = target.value;
-            if (!keterangan) return; // Abaikan jika user memilih placeholder "-- Ambil Jadwal --"
-            jam = target.dataset.jam;
-            waktu_text = target.dataset.waktuText;
-            confirmationMessage = `Anda yakin ingin mengambil jadwal ${keterangan} pada jam ${waktu_text}?`;
-        } else { // isCancelling
-            keterangan = 'cancel';
-            jam = target.dataset.jam;
-            waktu_text = target.dataset.waktuText;
-            confirmationMessage = `Anda yakin ingin membatalkan jadwal wawancara Anda?`;
-        }
+        const confirmationMessage = keterangan === 'cancel'
+            ? 'Anda yakin ingin membatalkan jadwal wawancara Anda?'
+            : `Anda yakin ingin mengambil jadwal ${keterangan} pada jam ${waktu_text}?`;
 
         if (!confirm(confirmationMessage)) {
-            if(isBooking) target.value = ""; // Reset dropdown jika user membatalkan konfirmasi
+            isProcessing = false;
             return;
         }
 
@@ -107,28 +93,50 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ day, jam, waktu_text, keterangan })
+                body: JSON.stringify({
+                    day: dateSelector.value,
+                    jam,
+                    waktu_text,
+                    keterangan
+                })
             });
-            const result = await response.json();
 
-            if (result.status !== 'success') {
-                throw new Error(result.message);
-            }
+            const result = await response.json();
+            if (result.status !== 'success') throw new Error(result.message);
             alert(result.message);
-        } catch(error) {
+        } catch (error) {
             alert(`Error: ${error.message}`);
         } finally {
+            isProcessing = false;
             fetchAndRenderSchedule();
         }
     };
 
-    if(dateSelector) {
+    // Event tombol "Batalkan"
+    tableBody.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('btn-cancel')) {
+            const jam = target.dataset.jam;
+            const waktu_text = target.dataset.waktuText;
+            handleBooking(jam, waktu_text, 'cancel');
+        }
+    });
+
+    // Event <select> pilihan jadwal
+    tableBody.addEventListener('change', (event) => {
+        const target = event.target;
+        if (target.classList.contains('select-book')) {
+            const keterangan = target.value;
+            if (!keterangan) return; // Jika pilih kosong
+            const jam = target.dataset.jam;
+            const waktu_text = target.dataset.waktuText;
+            handleBooking(jam, waktu_text, keterangan);
+        }
+    });
+
+    if (dateSelector) {
         dateSelector.addEventListener('change', fetchAndRenderSchedule);
     }
-    
-    // Dengarkan event click (untuk tombol) dan change (untuk select) pada table body
-    tableBody.addEventListener('click', handleBookingAction);
-    tableBody.addEventListener('change', handleBookingAction);
 
     fetchAndRenderSchedule();
 });

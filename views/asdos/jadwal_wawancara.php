@@ -41,7 +41,7 @@ $today_date = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
   <script>
     const userNPM = "<?= htmlspecialchars($user_npm, ENT_QUOTES, 'UTF-8') ?>";
   </script>
-  <script src="js/jadwal_booking.js"></script>
+  <script src="js/jadwal_booking.js?v=<?= time() ?>"></script>
   <?php require_once '../head-nav-foo/footer.php'; ?>
 </body>
 
