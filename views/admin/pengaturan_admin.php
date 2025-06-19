@@ -109,10 +109,6 @@ require __DIR__ . '/components/html_head.php';
     </div> 
 
     <?php 
-    // Dropdown Menus (required by header buttons)
-    require __DIR__ . '/components/admin_menu_dropdown.php';
-    require __DIR__ . '/components/notifications_dropdown.php'; 
-    
     // Mobile Menu
     require __DIR__ . '/components/mobile_menu.php'; 
     

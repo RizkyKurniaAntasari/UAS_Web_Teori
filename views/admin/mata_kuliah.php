@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../../db.php';
 
+
 $pageTitle = "Daftar Mata Kuliah";
 $currentPage = "mata_kuliah";
 
