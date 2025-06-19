@@ -8,14 +8,7 @@
             </div>
         </a>
         <div class="flex items-center space-x-3 sm:space-x-4">
-            <div class="relative">
-                <button id="notifications-btn"
-                    class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-secondary relative"
-                    aria-label="Notifikasi" title="Notifikasi">
-                    <i class="ri-notification-3-line ri-lg"></i>
-                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-            </div>
+            <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
             <div class="relative hidden md:flex">
                 <button id="admin-menu-btn" class="flex items-center space-x-2 text-gray-100 hover:text-secondary"
                     aria-label="Menu Admin" title="Menu Admin">
@@ -26,6 +19,7 @@
                     <i class="ri-arrow-down-s-line"></i>
                 </button>
             </div>
+            <?php endif; ?>
             <div class="md:hidden">
                 <button id="mobile-menu-button" title="Buka Menu" aria-label="Buka Menu" class="p-2 text-gray-200 hover:text-secondary focus:outline-none">
                     <i class="ri-menu-line ri-xl"></i>
@@ -34,3 +28,9 @@
         </div>
     </div>
 </header>
+<?php 
+
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    require __DIR__ . '/admin_menu_dropdown.php';
+}
+?>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../../db.php';
-
+require __DIR__ . '/components/html_head.php'; 
 $pageTitle = "Data Pendaftar";
 $currentPage = "pendaftar";
 
@@ -20,7 +20,6 @@ try {
     error_log("Failed to fetch pendaftar: " . $e->getMessage());
 }
 
-require __DIR__ . '/components/html_head.php';
 ?>
 
 <body class="bg-primary text-gray-300">
