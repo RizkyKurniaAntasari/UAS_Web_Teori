@@ -97,7 +97,6 @@ require __DIR__ . '/components/html_head.php';
                     <input type="text" name="nama" required class="form-input-dark">
                 </div>
 
-
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Mata Kuliah</label>
                     <select name="mata_kuliah" required class="form-input-dark">
@@ -107,10 +106,9 @@ require __DIR__ . '/components/html_head.php';
                     </select>
                 </div>
 
-
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Semester MK</label>
-                    <input type="text" name="semester_mk" required class="form-input-dark" inputmode="numeric" pattern="[1-8]">
+                    <input placeholder="matkul semester"  type="text" name="semester_mk" required class="form-input-dark" inputmode="numeric" pattern="[1-8]">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">PJ Kelas</label>
