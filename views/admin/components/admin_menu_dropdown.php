@@ -7,10 +7,7 @@
 ?>
 <div id="admin-menu-dropdown" class="hidden absolute right-4 sm:right-6 lg:right-8 top-[62px] sm:top-[66px] mt-1 w-48 bg-gray-800 rounded-lg shadow-xl border border-gray-700 z-[70]">
     <div class="p-1">
-        <a href="pengaturan_admin.php" class="block flex items-center space-x-3 px-3 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-secondary rounded-md">
-            <i class="ri-settings-3-line"></i>
-            <span>Pengaturan</span>
-        </a>
+        
         <hr class="my-1 border-gray-600">
         <a href="login.php?action=logout" class="block flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-gray-700 rounded-md" onclick="return confirm('Apakah Anda yakin ingin logout?');">
             <i class="ri-logout-box-r-line"></i>

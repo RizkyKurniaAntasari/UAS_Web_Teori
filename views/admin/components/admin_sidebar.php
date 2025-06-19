@@ -44,12 +44,6 @@ function isActive($pageName, $currentPage) {
             </div>
             <span>Hasil Seleksi</span>
         </a>
-        <a href="pengaturan_admin.php"
-            class="flex items-center space-x-3 px-4 py-3 <?php echo isActive('pengaturan', $currentPage); ?> rounded-lg">
-            <div class="w-5 h-5 flex items-center justify-center">
-                <i class="ri-settings-3-line"></i>
-            </div>
-            <span>Pengaturan</span>
-        </a>
+        
     </nav>
 </aside>
