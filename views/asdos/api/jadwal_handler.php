@@ -96,14 +96,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt->execute([$day, $jam, $user_npm]);
             $response = ['status' => 'success', 'message' => 'Jadwal berhasil dibatalkan.'];
         } else {
-            // Check if user already has another booking
+            // Cek apakah user sudah memiliki booking lain
             $stmt_check = $pdo->prepare("SELECT jam FROM jadwal_wawancara WHERE npm = ?");
             $stmt_check->execute([$user_npm]);
             if ($stmt_check->fetchColumn()) {
                 throw new Exception("Anda sudah memiliki jadwal. Batalkan jadwal lama untuk memilih yang baru.");
             }
             
-            // Atomically check and book the slot
+            // Cek dan booking slot secara atomik
             $stmt_nama = $pdo->prepare("SELECT nama FROM asdos WHERE npm = ?");
             $stmt_nama->execute([$user_npm]);
             $user_nama = $stmt_nama->fetchColumn();
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $pdo->commit();
     } catch (Exception $e) {
         $pdo->rollBack();
-        http_response_code(409); // Conflict
+        http_response_code(409); 
         $response['message'] = $e->getMessage();
     }
 }

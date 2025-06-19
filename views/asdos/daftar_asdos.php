@@ -1,7 +1,7 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
-session_start(); // Start the session if not already started
-require_once '../../db.php'; // Adjust path as needed for your project structure
+session_start(); // Mulai sesi jika belum dimulai
+require_once '../../db.php'; // Sesuaikan path sesuai struktur proyek Anda
 
 $user_data = ['nama' => '', 'npm' => ''];
 $pendaftaran_data = [];
@@ -9,7 +9,7 @@ $is_submitted = false;
 $disabled = '';
 $available_courses = [];
 
-// Default values for form fields if not submitted or user not logged in
+// Nilai default untuk field form jika belum submit atau user belum login
 $nama = '';
 $npm = '';
 $wa = '';
@@ -19,13 +19,13 @@ $alasan = '';
 $kebersediaan = '';
 $pengalaman = '';
 $prioritas = '';
-$file_uploaded = ''; // To store the filename if already uploaded
+$file_uploaded = ''; // Untuk menyimpan nama file jika sudah diupload
 
 if (isset($_SESSION['user'])) {
     $user_id = $_SESSION['user'];
     $pdo = get_pdo_connection();
 
-    // Fetch user basic data (nama, npm)
+    // Ambil data dasar user (nama, npm)
     $stmt = $pdo->prepare("SELECT nama, npm FROM asdos WHERE npm = ? LIMIT 1");
     $stmt->execute([$user_id]);
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -35,15 +35,15 @@ if (isset($_SESSION['user'])) {
         $npm = $user_data['npm'];
     }
 
-    // Fetch existing application data
+    // Ambil data pendaftaran yang sudah ada
     $stmt = $pdo->prepare("SELECT * FROM pendaftaran WHERE npm = ? LIMIT 1");
     $stmt->execute([$user_id]);
     $pendaftaran_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($pendaftaran_data) {
         $is_submitted = true;
-        $disabled = 'disabled'; // Disable form fields
-        // Populate form fields with submitted data
+        $disabled = 'disabled'; // Nonaktifkan field form
+        // Isi field form dengan data yang sudah disubmit
         $wa = $pendaftaran_data['wa'];
         $matkul1 = $pendaftaran_data['matkul1'];
         $matkul2 = $pendaftaran_data['matkul2'];
@@ -51,14 +51,14 @@ if (isset($_SESSION['user'])) {
         $kebersediaan = $pendaftaran_data['kebersediaan'];
         $pengalaman = $pendaftaran_data['pengalaman'];
         $prioritas = $pendaftaran_data['prioritas'];
-        $file_uploaded = $pendaftaran_data['file']; // Get the uploaded file name
+        $file_uploaded = $pendaftaran_data['file']; // Ambil nama file yang sudah diupload
     }
     
-    // Fetch all active course names
+    // Ambil semua nama mata kuliah yang aktif
     $stmt_courses = $pdo->query("SELECT nama FROM mata_kuliah WHERE status = 'Aktif' ORDER BY nama");
     $raw_courses = $stmt_courses->fetchAll(PDO::FETCH_COLUMN);
 
-    // Process raw courses to ensure case-insensitive uniqueness
+    // Proses agar nama mata kuliah unik tanpa memperhatikan kapital
     $seen_courses = [];
     foreach ($raw_courses as $course) {
         $lower_course = strtolower($course);
@@ -69,9 +69,9 @@ if (isset($_SESSION['user'])) {
     $available_courses = array_values($seen_courses);
     sort($available_courses);
 } else {
-    // Redirect or handle case where user is not logged in
-    // For example: header('Location: login.php'); exit();
-    // For this example, we'll just leave fields empty
+    // Redirect atau handle jika user belum login
+    // Contoh: header('Location: login.php'); exit();
+    // Untuk contoh ini, field dibiarkan kosong
 }
 ?>
 

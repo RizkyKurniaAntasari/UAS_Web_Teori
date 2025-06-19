@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (isBooking) {
             keterangan = target.value;
-            if (!keterangan) return; // Ignore if user selects the placeholder "-- Ambil Jadwal --"
+            if (!keterangan) return; // Abaikan jika user memilih placeholder "-- Ambil Jadwal --"
             jam = target.dataset.jam;
             waktu_text = target.dataset.waktuText;
             confirmationMessage = `Anda yakin ingin mengambil jadwal ${keterangan} pada jam ${waktu_text}?`;
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!confirm(confirmationMessage)) {
-            if(isBooking) target.value = ""; // Reset dropdown if user cancels confirmation
+            if(isBooking) target.value = ""; // Reset dropdown jika user membatalkan konfirmasi
             return;
         }
 
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dateSelector.addEventListener('change', fetchAndRenderSchedule);
     }
     
-    // Listen to both click (for button) and change (for select) events on the table body
+    // Dengarkan event click (untuk tombol) dan change (untuk select) pada table body
     tableBody.addEventListener('click', handleBookingAction);
     tableBody.addEventListener('change', handleBookingAction);
 
