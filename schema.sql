@@ -58,12 +58,3 @@ CREATE TABLE IF NOT EXISTS hasil_seleksi (
     FOREIGN KEY (npm) REFERENCES asdos(npm) ON DELETE CASCADE,
     FOREIGN KEY (id_mata_kuliah) REFERENCES mata_kuliah(id) ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS slot_jadwal (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    jenis_jadwal VARCHAR(50) NOT NULL,
-    tanggal DATE NOT NULL,
-    pukul TIME NOT NULL,
-    status ENUM('Dibuka', 'Ditutup') NOT NULL DEFAULT 'Dibuka',
-    UNIQUE KEY (tanggal, pukul)
-);
