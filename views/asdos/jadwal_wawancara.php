@@ -5,7 +5,7 @@ require_once '../head-nav-foo/header.php';
 require_once '../head-nav-foo/navbar.php';
 
 $user_npm = $_SESSION['user'] ?? '';
-$today_date = date('Y-m-d'); // Get today's date in YYYY-MM-DD format
+$today_date = date('Y-m-d'); 
 ?>
 <!DOCTYPE html>
 <html lang="id">

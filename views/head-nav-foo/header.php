@@ -14,7 +14,6 @@ if (isset($_SESSION['user'])) {
         }
     } catch (PDOException $e) {
         error_log("Header user fetch error: " . $e->getMessage());
-        // Optionally, handle error gracefully for the user, e.g., redirect or show a message
     }
 }
 ?>
