@@ -20,7 +20,7 @@ $kebersediaan = '';
 $pengalaman = '';
 $prioritas = '';
 $file_uploaded = ''; // Untuk menyimpan nama file jika sudah diupload
-var_dump($_SESSION);
+// var_dump($_SESSION);
 if (isset($_SESSION['user'])) {
     $user_id = $_SESSION['user'];
     $pdo = get_pdo_connection();
@@ -28,9 +28,9 @@ if (isset($_SESSION['user'])) {
     // Ambil data dasar user (nama, npm)
     $stmt = $pdo->prepare("SELECT nama, npm FROM asdos WHERE npm = ? LIMIT 1");
     $stmt->execute([$user_id]);
-    var_dump($stmt);
+    // var_dump($stmt);
     $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
-    var_dump($user_data);
+    // var_dump($user_data);
 
     if ($user_data) {
         $nama = $user_data['nama'];
