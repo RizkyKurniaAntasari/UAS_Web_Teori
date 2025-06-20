@@ -6,7 +6,7 @@ USE uas_web;
 CREATE TABLE IF NOT EXISTS asdos(
     npm INT UNSIGNED PRIMARY KEY,
     nama VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(60000) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS pendaftaran(
