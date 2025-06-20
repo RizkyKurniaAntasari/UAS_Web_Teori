@@ -20,6 +20,7 @@ $kebersediaan = '';
 $pengalaman = '';
 $prioritas = '';
 $file_uploaded = ''; // Untuk menyimpan nama file jika sudah diupload
+$keterangan = '';
 // var_dump($_SESSION);
 if (isset($_SESSION['user'])) {
     $user_id = $_SESSION['user'];
@@ -53,6 +54,7 @@ if (isset($_SESSION['user'])) {
         $kebersediaan = $pendaftaran_data['kebersediaan'];
         $pengalaman = $pendaftaran_data['pengalaman'];
         $prioritas = $pendaftaran_data['prioritas'];
+        $keterangan = $pendaftaran_data['keterangan'];
         $file_uploaded = $pendaftaran_data['file']; // Ambil nama file yang sudah diupload
     }
     
@@ -132,6 +134,7 @@ if (isset($_SESSION['user'])) {
                     <?php endforeach; ?>
                 </select>
             </div>
+            <input type="hidden" name="kebersediaan" value="Bersedia">
 
             <div>
                 <label class="block font-bold mb-1">Alasan Mendaftar</label>
@@ -139,15 +142,11 @@ if (isset($_SESSION['user'])) {
                     class="w-full border border-gray-400 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ffcc00]"
                     placeholder="Tuliskan alasan Anda ingin menjadi asisten dosen"><?= htmlspecialchars($alasan) ?></textarea>
             </div>
-
             <div>
-                <label class="block font-bold mb-1">Apakah Anda bersedia menjadi asdos di 2 mata kuliah?</label>
-                <select name="kebersediaan" required <?= $disabled ?>
-                    class="w-full border border-gray-400 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ffcc00]">
-                    <option value="" disabled <?= empty($kebersediaan) ? 'selected' : '' ?>>Pilih Jawaban</option>
-                    <option <?= $kebersediaan == 'Bersedia' ? 'selected' : '' ?>>Bersedia</option>
-                    <option <?= $kebersediaan == 'Tidak Bersedia' ? 'selected' : '' ?>>Tidak Bersedia</option>
-                </select>
+                <label class="block font-bold mb-1">Keterangan (Opsional)</label>
+                <textarea name="keterangan" rows="4" <?= $disabled ?>
+                    class="w-full border border-gray-400 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#ffcc00]"
+                    placeholder="Tuliskan keterangan tambahan"><?= htmlspecialchars($keterangan) ?></textarea>
             </div>
 
             <div>
