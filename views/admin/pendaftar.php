@@ -42,6 +42,7 @@ try {
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Pengalaman</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Ditempatkan diMatkul lain</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Keterangan</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -76,6 +77,7 @@ try {
                                                 <option value="Ditolak" <?= $pendaftar['status'] == 'Ditolak' ? 'selected' : '' ?>>Ditolak</option>
                                             </select>
                                         </td>
+                                        <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['keterangan']) ?></td>
                                         <td class="px-6 py-4 align-top text-center">
                                             <div class="flex items-center justify-center space-x-2">
                                                 <a href="<?= BASE_URL . '/uploads/' . htmlspecialchars($pendaftar['file']) ?>" target="_blank" title="Lihat Berkas" class="text-gray-300 hover:text-secondary p-1.5"><i class="ri-file-text-line ri-lg"></i></a>
