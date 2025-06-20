@@ -1,5 +1,9 @@
 <?php
 session_start();
+if ($_SESSION['username'] != 'admin') {
+    header("Location: index.php");
+    exit;
+}
 require_once '../../db.php';
 require __DIR__ . '/components/html_head.php'; 
 $pageTitle = "Data Pendaftar";

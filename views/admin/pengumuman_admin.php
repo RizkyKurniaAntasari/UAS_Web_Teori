@@ -1,5 +1,9 @@
 <?php
 session_start();
+if ($_SESSION['username'] != 'admin') {
+    header("Location: index.php");
+    exit;
+}
 require_once __DIR__ . '/../../db.php';
 
 $pageTitle = "Kelola Pengumuman";
