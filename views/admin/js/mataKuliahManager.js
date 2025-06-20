@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnCancel = document.getElementById('btn-cancel-modal-add-edit');
     const form = document.getElementById('form-add-edit-mk');
     const tableBody = document.querySelector('#tabel-mk tbody');
+    const modalTitle = document.getElementById('modal-mk-title');
+    const mkIdInput = document.getElementById('mk-id');
+    const mkActionInput = document.getElementById('mk-action');
+    const mkKodeInput = document.getElementById('mk-kode');
+    const mkNamaInput = document.getElementById('mk-nama');
+    const mkSksInput = document.getElementById('mk-sks');
+    const mkSemesterSelect = document.getElementById('mk-semester');
+    const mkDosenInput = document.getElementById('mk-dosen');
+    const mkKuotaInput = document.getElementById('mk-kuota');
+    const mkStatusSelect = document.getElementById('mk-status');
 
     const openModal = () => modal.classList.remove('hidden');
     const closeModal = () => modal.classList.add('hidden');
@@ -26,8 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateTableRow(result.data);
             }
             closeModal();
+            alert(result.message); // Show success message
         } else {
-            alert(result.message);
+            alert(result.message); // Show error message
         }
     };
     
@@ -36,21 +47,20 @@ document.addEventListener('DOMContentLoaded', function () {
         return `
             <td class="px-6 py-4" data-col="nama">
                 <div>
-                    <div class="text-sm font-semibold text-gray-100">${data.kode}</div>
+                    <div class="font-semibold">${data.kode}</div>
                     <div class="text-xs text-gray-400 mt-0.5">${data.nama}</div>
-                </div>
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-300" data-col="sks">${data.sks}</td>
-            <td class="px-6 py-4 text-sm text-gray-300" data-col="semester">${data.semester}</td>
-            <td class="px-6 py-4 text-sm text-gray-300" data-col="dosen">${data.dosen}</td>
-            <td class="px-6 py-4 text-sm text-gray-300" data-col="kuota">${data.kuota}</td>
-            <td class="px-6 py-4" data-col="status">
-                <span class="px-3 py-1 text-xs font-semibold rounded-full ${statusColor}">${data.status}</span>
+                </td>
+            <td class="px-6 py-4">${data.sks}</td>
+            <td class="px-6 py-4">${data.semester}</td>
+            <td class="px-6 py-4">${data.dosen}</td>
+            <td class="px-6 py-4">${data.kuota}</td>
+            <td class="px-6 py-4">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${data.status}</span>
             </td>
             <td class="px-6 py-4 text-center">
                 <div class="flex items-center justify-center space-x-2">
-                    <button title="Edit" class="text-gray-300 hover:text-secondary p-1.5 rounded-md btn-edit-mk"><i class="ri-pencil-line ri-lg"></i></button>
-                    <button title="Hapus" class="text-gray-300 hover:text-red-400 p-1.5 rounded-md btn-hapus-mk"><i class="ri-delete-bin-line ri-lg"></i></button>
+                    <button title="Edit" class="text-gray-400 hover:text-[#FFCC00] p-1.5 btn-edit-mk"><i class="ri-pencil-line ri-lg"></i></button>
+                    <button title="Hapus" class="text-gray-400 hover:text-red-400 p-1.5 btn-hapus-mk"><i class="ri-delete-bin-line ri-lg"></i></button>
                 </div>
             </td>
         `;
@@ -72,10 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     btnTambah.addEventListener('click', () => {
-        form.reset();
-        document.getElementById('modal-mk-title').textContent = 'Tambah Mata Kuliah Baru';
-        document.getElementById('mk-action').value = 'create';
-        document.getElementById('mk-id').value = '';
+        form.reset(); // Clear form fields
+        modalTitle.textContent = 'Tambah Mata Kuliah Baru';
+        mkActionInput.value = 'create';
+        mkIdInput.value = '';
         openModal();
     });
 
@@ -86,26 +96,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (editBtn) {
             const id = row.dataset.id;
-            const cells = row.querySelectorAll('td');
+            // Fetch the data from the row
+            const kode = row.children[0].querySelector('.font-semibold').textContent.trim();
+            const nama = row.children[0].querySelector('.text-xs').textContent.trim();
+            const sks = row.children[1].textContent.trim();
+            const semester = row.children[2].textContent.trim();
+            const dosen = row.children[3].textContent.trim();
+            const kuota = row.children[4].textContent.trim();
+            const status = row.children[5].querySelector('span').textContent.trim();
             
-            form.reset();
-            document.getElementById('modal-mk-title').textContent = 'Edit Mata Kuliah';
-            document.getElementById('mk-action').value = 'update';
-            document.getElementById('mk-id').value = id;
-
-            document.getElementById('mk-kode').value = cells[0].querySelector('div > div:first-child').textContent;
-            document.getElementById('mk-nama').value = cells[0].querySelector('div > div:last-child').textContent;
-            document.getElementById('mk-sks').value = cells[1].textContent;
-            document.getElementById('mk-semester').value = cells[2].textContent;
-            document.getElementById('mk-dosen').value = cells[3].textContent;
-            document.getElementById('mk-kuota').value = cells[4].textContent;
-            document.getElementById('mk-status').value = cells[5].querySelector('span').textContent;
+            // Populate the form fields
+            mkIdInput.value = id;
+            mkActionInput.value = 'update';
+            modalTitle.textContent = 'Edit Mata Kuliah';
+            mkKodeInput.value = kode;
+            mkNamaInput.value = nama;
+            mkSksInput.value = sks;
+            mkSemesterSelect.value = semester;
+            mkDosenInput.value = dosen;
+            mkKuotaInput.value = kuota;
+            mkStatusSelect.value = status;
+            
             openModal();
         }
 
         if (deleteBtn) {
             const id = row.dataset.id;
-            if (confirm('Apakah Anda yakin ingin menghapus mata kuliah ini?')) {
+            const namaMk = row.children[0].querySelector('.text-xs').textContent.trim();
+            if (confirm(`Apakah Anda yakin ingin menghapus mata kuliah "${namaMk}"?`)) {
                 const formData = new FormData();
                 formData.append('action', 'delete');
                 formData.append('id', id);
@@ -115,6 +133,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (result.status === 'success') {
                     row.remove();
+                    if (tableBody.children.length === 0) {
+                        const noResultsRow = document.createElement('tr');
+                        noResultsRow.id = 'no-results-mk';
+                        noResultsRow.innerHTML = '<td colspan="7" class="px-6 py-12 text-center text-gray-500">Tidak ada data mata kuliah.</td>';
+                        tableBody.appendChild(noResultsRow);
+                    }
+                    alert(result.message);
                 } else {
                     alert(result.message);
                 }

@@ -2,6 +2,10 @@
 session_start();
 require_once __DIR__ . '/../../db.php';
 
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
 
 $pageTitle = "Daftar Mata Kuliah";
 $currentPage = "mata_kuliah";
@@ -53,27 +57,31 @@ require __DIR__ . '/components/html_head.php';
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-[#374151]">
-                            <?php foreach ($mata_kuliah_list as $mk): ?>
-                                <tr data-id="<?= $mk['id'] ?>">
-                                    <td class="px-6 py-4">
-                                        <div class="font-semibold"><?= htmlspecialchars($mk['kode']) ?></div>
-                                        <div class="text-xs text-gray-400"><?= htmlspecialchars($mk['nama']) ?></div>
-                                    </td>
-                                    <td class="px-6 py-4"><?= htmlspecialchars($mk['sks']) ?></td>
-                                    <td class="px-6 py-4"><?= htmlspecialchars($mk['semester']) ?></td>
-                                    <td class="px-6 py-4"><?= htmlspecialchars($mk['dosen']) ?></td>
-                                    <td class="px-6 py-4"><?= htmlspecialchars($mk['kuota']) ?></td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full <?= $mk['status'] == 'Aktif' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400' ?>"><?= htmlspecialchars($mk['status']) ?></span>
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <div class="flex items-center justify-center space-x-2">
-                                            <button title="Edit" class="text-gray-400 hover:text-[#FFCC00] p-1.5 btn-edit-mk"><i class="ri-pencil-line ri-lg"></i></button>
-                                            <button title="Hapus" class="text-gray-400 hover:text-red-400 p-1.5 btn-hapus-mk"><i class="ri-delete-bin-line ri-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
+                            <?php if (empty($mata_kuliah_list)): ?>
+                                <tr id="no-results-mk"><td colspan="7" class="px-6 py-12 text-center text-gray-500">Tidak ada data mata kuliah.</td></tr>
+                            <?php else: ?>
+                                <?php foreach ($mata_kuliah_list as $mk): ?>
+                                    <tr data-id="<?= $mk['id'] ?>">
+                                        <td class="px-6 py-4">
+                                            <div class="font-semibold"><?= htmlspecialchars($mk['kode']) ?></div>
+                                            <div class="text-xs text-gray-400"><?= htmlspecialchars($mk['nama']) ?></div>
+                                        </td>
+                                        <td class="px-6 py-4"><?= htmlspecialchars($mk['sks']) ?></td>
+                                        <td class="px-6 py-4"><?= htmlspecialchars($mk['semester']) ?></td>
+                                        <td class="px-6 py-4"><?= htmlspecialchars($mk['dosen']) ?></td>
+                                        <td class="px-6 py-4"><?= htmlspecialchars($mk['kuota']) ?></td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full <?= $mk['status'] == 'Aktif' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400' ?>"><?= htmlspecialchars($mk['status']) ?></span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="flex items-center justify-center space-x-2">
+                                                <button title="Edit" class="text-gray-400 hover:text-[#FFCC00] p-1.5 btn-edit-mk"><i class="ri-pencil-line ri-lg"></i></button>
+                                                <button title="Hapus" class="text-gray-400 hover:text-red-400 p-1.5 btn-hapus-mk"><i class="ri-delete-bin-line ri-lg"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
