@@ -1,5 +1,9 @@
 <?php
 session_start();
+if ($_SESSION['username'] != 'admin') {
+    header("Location: index.php");
+    exit;
+}
 require_once __DIR__ . '/../../db.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
