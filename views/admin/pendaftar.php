@@ -40,6 +40,7 @@ try {
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Matkul 2</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Kebersediaan</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Pengalaman</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Ditempatkan diMatkul lain</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-xs font-medium text-gray-300 uppercase tracking-wider text-center">Aksi</th>
                             </tr>
@@ -67,6 +68,7 @@ try {
                                         <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['matkul2']) ?></td>
                                         <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['kebersediaan']) ?></td>
                                         <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['pengalaman']) ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-300 align-top"><?= htmlspecialchars($pendaftar['prioritas']) ?></td>
                                         <td class="px-6 py-4 align-top">
                                             <select name="status" class="status-select bg-gray-700 border border-gray-600 text-gray-200 rounded-lg text-xs p-1">
                                                 <option value="Dalam Review" <?= $pendaftar['status'] == 'Dalam Review' ? 'selected' : '' ?>>Dalam Review</option>
