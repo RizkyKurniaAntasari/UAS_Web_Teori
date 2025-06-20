@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS pendaftaran(
     prioritas VARCHAR(50),
     file VARCHAR(255) NOT NULL,
     status VARCHAR(20) DEFAULT NULL,
+    keterangan varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT '-',
     FOREIGN KEY (npm) REFERENCES asdos(npm) ON DELETE CASCADE
 );
 
