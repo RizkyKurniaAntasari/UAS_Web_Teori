@@ -91,8 +91,6 @@ if (isset($_SESSION['user'])) {
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen">
-    <?php render_header(); ?>
-    <?php render_navbar($currentPage); ?>
     <section class="p-8 max-w-4xl mx-auto bg-white shadow-md rounded-md mb-10 mt-8 flex-grow w-full">
         <h2 class="text-center text-3xl font-bold text-black mb-10">Form Pendaftaran Asisten Dosen</h2>
         <form action="../../controller/asdos/daftar_asdos_logic.php" method="POST" enctype="multipart/form-data" class="space-y-5" autocomplete="off">

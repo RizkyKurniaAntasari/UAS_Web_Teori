@@ -45,8 +45,6 @@ try {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
-    <?php render_header(); ?>
-    <?php render_navbar($currentPage); ?>
     <div class="px-10 py-6 flex flex-col flex-grow">
         <h1 class="text-3xl font-bold mb-8 pt-3 text-center text-gray-800">Selamat & Sukses Asisten Dosen Baru!</h1>
 

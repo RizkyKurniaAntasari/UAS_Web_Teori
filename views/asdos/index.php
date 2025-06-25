@@ -45,8 +45,6 @@ try {
 </head>
 
 <body class="bg-gray-50 flex flex-col min-h-screen">
-    <?php render_header(); ?>
-    <?php render_navbar($currentPage); ?>
     <section id="beranda" class="">
         <div class="slider-container">
             <div class="slider">
