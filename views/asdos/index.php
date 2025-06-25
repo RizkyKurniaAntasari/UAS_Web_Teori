@@ -22,8 +22,8 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Open Recruitment Asisten Dosen Ganjil 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preload" as="image" href="../../img/FOTO/DSC_1801.webp" />
-    <link rel="preload" as="image" href="../../img/FOTO/IMG_6726.webp" />
+    <link rel="preload" as="image" href="../../img/FOTO/DSC_1801.webp" type="image/webp">
+    <link rel="preload" as="image" href="../../img/FOTO/IMG_6726.webp" type="image/webp">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
