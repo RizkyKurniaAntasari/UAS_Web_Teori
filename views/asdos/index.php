@@ -22,21 +22,14 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Open Recruitment Asisten Dosen Ganjil 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Open Recruitment Asisten Dosen Ganjil 2025</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" as="image" href="../../img/FOTO/DSC_1801.webp" />
+    <link rel="preload" as="image" href="../../img/FOTO/IMG_6726.webp" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet" />
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
-    <link rel="stylesheet" href="style/index_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" />
+    <link rel="stylesheet" href="style/index_style.css">
     <style>
         .slider {
             display: flex;
@@ -45,15 +38,19 @@ try {
 
         .slide {
             min-width: 100%;
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
 
 <body class="bg-gray-50 flex flex-col min-h-screen">
+    <?php render_header(); ?>
+    <?php render_navbar($currentPage); ?>
     <section id="beranda" class="">
         <div class="slider-container">
             <div class="slider">
-                <div class="slide" style="background-image: url('../../img/FOTO/DSC_1801.JPG')">
+                <div class="slide" style="background-image: url('../../img/FOTO/DSC_1801.webp')">
                     <div class="slide-overlay">
                         <div class="slide-content">
                             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -74,7 +71,7 @@ try {
                         </div>
                     </div>
                 </div>
-                <div class="slide" style="background-image: url('../../img/FOTO/IMG_6726.JPG')">
+                <div class="slide" style="background-image: url('../../img/FOTO/IMG_6726.webp')">
                     <div class="slide-overlay">
                         <div class="slide-content">
                             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -95,7 +92,7 @@ try {
                         </div>
                     </div>
                 </div>
-                <div class="slide" style="background-image: url('../../img/FOTO/DSCF9427.JPG')">
+                <div class="slide" style="background-image: url('../../img/FOTO/DSCF9427.webp')">
                     <div class="slide-overlay">
                         <div class="slide-content">
                             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -116,7 +113,7 @@ try {
                         </div>
                     </div>
                 </div>
-                <div class="slide" style="background-image: url('../../img/FOTO/IMG_0286.JPG')">
+                <div class="slide" style="background-image: url('../../img/FOTO/IMG_0286.webp')">
                     <div class="slide-overlay">
                         <div class="slide-content">
                             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -136,7 +133,7 @@ try {
                         </div>
                     </div>
                 </div>
-                <div class="slide" style="background-image: url('../../img/FOTO/IMG_5465.JPG')">
+                <div class="slide" style="background-image: url('../../img/FOTO/IMG_5465.webp')">
                     <div class="slide-overlay">
                         <div class="slide-content">
                             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">

@@ -1,9 +1,5 @@
 <?php
 session_start();
-if ($_SESSION['username'] != 'admin') {
-    header("Location: index.php");
-    exit;
-}
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username_valid = 'admin';
     $password_valid = 'password'; 

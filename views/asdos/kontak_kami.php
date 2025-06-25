@@ -14,6 +14,8 @@ require_once '../head-nav-foo/navbar.php';
 </head>
 
 <body class="bg-gray-100 flex flex-col min-h-screen">
+    <?php render_header(); ?>
+    <?php render_navbar($currentPage); ?>
     <div class="max-w-4xl mx-auto px-4 py-10 flex flex-col flex-grow">
         <h1 class="text-3xl font-bold text-center mb-8">Kontak Kami</h1>
 

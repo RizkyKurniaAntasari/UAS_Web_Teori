@@ -5,7 +5,7 @@ require_once '../head-nav-foo/header.php';
 require_once '../head-nav-foo/navbar.php';
 
 $user_npm = $_SESSION['user'] ?? '';
-$today_date = date('Y-m-d'); 
+$today_date = date('Y-m-d');
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -16,7 +16,10 @@ $today_date = date('Y-m-d');
   <title>Jadwal Wawancara</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+  <?php render_header(); ?>
+  <?php render_navbar($currentPage); ?>
   <div class="flex-grow max-w-5xl mx-auto p-6 w-full">
     <h1 class="text-3xl font-bold text-center mb-8">Jadwal Wawancara Calon Asisten</h1>
     <div class="flex justify-end mb-4">
